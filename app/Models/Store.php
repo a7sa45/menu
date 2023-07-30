@@ -35,4 +35,10 @@ class Store extends Model
     {
         return $this->hasMany(Link::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
 }
