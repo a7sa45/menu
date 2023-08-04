@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['create', 'edit',]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -20,7 +26,7 @@ class StoreController extends Controller
      */
     public function create()
     {
-        //
+        return view('stores.create'); 
     }
 
     /**
@@ -28,7 +34,27 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = request()->validate([
+            'name'  => 'required', 'string',
+            'bio'   => 'required', 'string',
+            'location'   => 'required', 'string',
+            'img'    => 'image|mimes:png,jpg,jpeg|max:2048',   
+        ]);
+
+        if($request->img){
+            $imageName = time().'.'.$request->img->extension();
+            // Public Folder
+            $request->img->move(public_path('images'), $imageName);
+        }
+
+        auth()->user()->stores()->create([
+            'name' => $data['name'],
+            'bio' => $data['bio'],
+            'location' => $data['location'],
+            'img' => $imageName,
+        ]);
+
+        return redirect('/home')->with('success', 'تم انشاء الاختصار بنجاح !');
     }
 
     /**

@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <a href="/stores/create" type="button" class="btn btn-info">create a store</a>
                 </div>
             </div>
         </div>
